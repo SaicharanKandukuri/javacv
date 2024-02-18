@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacv</artifactId>
@@ -122,11 +123,11 @@
       <artifactId>artoolkitplus</artifactId>
       <version>2.3.1-1.5.9</version>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>org.bytedeco</groupId>-->
-<!--      <artifactId>flandmark</artifactId>-->
-<!--      <version>1.07-1.5.8</version>-->
-<!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.bytedeco</groupId>-->
+    <!--      <artifactId>flandmark</artifactId>-->
+    <!--      <version>1.07-1.5.8</version>-->
+    <!--    </dependency>-->
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>leptonica</artifactId>
@@ -144,8 +145,8 @@
       <version>4.1.1.4</version>
       <exclusions>
         <exclusion>
-            <groupId>*</groupId>
-            <artifactId>*</artifactId>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
         </exclusion>
       </exclusions>
       <optional>true</optional>
@@ -189,6 +190,47 @@
     <finalName>${project.artifactId}</finalName>
     <plugins>
       <plugin>
+        <groupId>org.spdx</groupId>
+        <artifactId>spdx-maven-plugin</artifactId>
+        <!-- please check for updates on https://search.maven.org/search?q=a:spdx-maven-plugin -->
+        <version>0.6.5</version>
+        <executions>
+          <execution>
+            <id>build-spdx</id>
+            <goals>
+              <goal>createSPDX</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <excludedFilePatterns>
+            <excludedFilePattern>*.spdx</excludedFilePattern>
+          </excludedFilePatterns>
+          <!-- See documentation below for additional configuration -->
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.cyclonedx</groupId>
+        <artifactId>cyclonedx-maven-plugin</artifactId>
+        <configuration>
+          <projectType>library</projectType>
+          <schemaVersion>1.5</schemaVersion>
+          <includeBomSerialNumber>true</includeBomSerialNumber>
+          <includeCompileScope>true</includeCompileScope>
+          <includeProvidedScope>true</includeProvidedScope>
+          <includeRuntimeScope>true</includeRuntimeScope>
+          <includeSystemScope>true</includeSystemScope>
+          <includeTestScope>false</includeTestScope>
+          <includeLicenseText>false</includeLicenseText>
+          <outputReactorProjects>true</outputReactorProjects>
+          <outputFormat>all</outputFormat>
+          <outputName>bom</outputName>
+          <outputDirectory>${project.build.directory}</outputDirectory><!-- usually target, if not
+          redefined in pom.xml -->
+          <verbose>false</verbose><!-- = ${cyclonedx.verbose} -->
+        </configuration>
+      </plugin>
+      <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.12.1</version>
         <configuration>
@@ -211,7 +253,9 @@
             </manifest>
             <manifestEntries>
               <!-- <addClasspath/> is broken: http://jira.codehaus.org/browse/MJAR-61 -->
-              <Class-Path>javacpp.jar openblas.jar opencv.jar ffmpeg.jar flycapture.jar libdc1394.jar libfreenect.jar libfreenect2.jar librealsense.jar librealsense2.jar videoinput.jar artoolkitplus.jar flandmark.jar leptonica.jar tesseract.jar</Class-Path>
+              <Class-Path>javacpp.jar openblas.jar opencv.jar ffmpeg.jar flycapture.jar
+                libdc1394.jar libfreenect.jar libfreenect2.jar librealsense.jar librealsense2.jar
+                videoinput.jar artoolkitplus.jar flandmark.jar leptonica.jar tesseract.jar</Class-Path>
               <Implementation-Title>${project.name}</Implementation-Title>
               <Implementation-Vendor>Bytedeco</Implementation-Vendor>
               <Implementation-Version>${project.version}</Implementation-Version>
